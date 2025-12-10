@@ -59,8 +59,11 @@ echo
 read -r -p "Promote this digest to tag '${TARGET_TAG}' for variant '${variant}'? [y/N] " answer
 case "${answer}" in
   [yY]|[yY][eE][sS])
+    echo -n "Please enter GitHub token: "
+    IFS= read -rs GHCR_TOKEN
+    echo
     echo "Promoting..."
-    skopeo copy --all "${SRC_REF}" "${DST_REF}"
+    skopeo copy --all --src-creds "komorebinator:${GHCR_TOKEN}" --dest-creds "komorebinator:${GHCR_TOKEN}" "${SRC_REF}" "${DST_REF}"
     echo "Done."
     echo "Tag '${TARGET_TAG}' for ${image_repo} now points to:"
     echo "  ${current_digest}"
